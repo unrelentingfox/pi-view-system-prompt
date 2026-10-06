@@ -5,25 +5,33 @@ export interface PromptViewer {
 	view(prompt: string, ctx: ExtensionContext): Promise<void>;
 }
 
-const viewer: PromptViewer = {
-	async view(prompt, ctx) {
-		if (ctx.mode !== "tui") {
-			ctx.ui.notify("System-prompt viewer requires TUI mode", "warning");
-			return;
-		}
-		await ctx.ui.custom<void>((tui, _theme, _keybindings, done) => {
-			void openEditor(tui, prompt, ctx, done);
-			return { render: () => [], invalidate: () => {} };
-		});
-	},
-};
+type ViewPrompt = (prompt: string) => Promise<void>;
+
+export function createPromptViewer(viewPrompt: ViewPrompt): PromptViewer {
+	return {
+		async view(prompt, ctx) {
+			if (ctx.mode !== "tui") {
+				ctx.ui.notify("System-prompt viewer requires TUI mode", "warning");
+				return;
+			}
+			await ctx.ui.custom<void>((tui, _theme, _keybindings, done) => {
+				void openEditor(tui, prompt, ctx, done, viewPrompt);
+				return { render: () => [], invalidate: () => {} };
+			});
+		},
+	};
+}
+
+export const defaultPromptViewer = createPromptViewer(
+	(content) => viewInEditor(content, selectEditor()),
+);
 
 export async function openEditor(
 	tui: { stop(): void; start(): void; requestRender(full?: boolean): void },
 	prompt: string,
 	ctx: ExtensionContext,
 	done: () => void,
-	viewPrompt = (content: string) => viewInEditor(content, selectEditor()),
+	viewPrompt: ViewPrompt,
 ): Promise<void> {
 	tui.stop();
 	try {
@@ -37,7 +45,7 @@ export async function openEditor(
 	}
 }
 
-export function registerViewSystemPrompt(pi: ExtensionAPI, promptViewer: PromptViewer = viewer): void {
+export function registerViewSystemPrompt(pi: ExtensionAPI, promptViewer: PromptViewer = defaultPromptViewer): void {
 	let latestPrompt: string | undefined;
 	pi.on("before_agent_start", (event) => {
 		latestPrompt = event.systemPrompt;

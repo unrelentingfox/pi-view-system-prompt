@@ -1,0 +1,10 @@
+{
+  "bootstrap-sha": "3c979a898f24dd8a585e03d424cf84143504dc0a",
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "pi-view-system-prompt",
+      "include-component-in-tag": false
+    }
+  }
+}

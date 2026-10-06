@@ -13,23 +13,36 @@
     "url": "https://github.com/unrelentingfox/pi-view-system-prompt/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "type": "module",
-  "files": ["index.ts", "src", "README.md", "LICENSE", "CHANGELOG.md", "SECURITY.md"],
+  "files": [
+    "index.ts",
+    "src/**/*.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "SECURITY.md",
+    "RELEASING.md"
+  ],
   "keywords": ["pi-package", "pi", "system-prompt"],
   "engines": { "node": ">=22.19.0" },
   "pi": { "extensions": ["./index.ts"] },
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test test/*.test.ts",
-    "pack:check": "node scripts/check-package.mjs"
+    "hooks:install": "git config core.hooksPath .githooks",
+    "test": "node --import ./scripts/pi-resolve.mjs --experimental-strip-types --test test/*.test.ts test/*.test.mjs",
+    "coverage": "c8 --all --include='index.ts' --include='src/**/*.ts' --reporter=text --reporter=lcov --check-coverage --lines=95 npm test",
+    "typecheck": "tsc -p tsconfig.json",
+    "check:pack": "node scripts/check-package.mjs",
+    "check": "npm run coverage && npm run typecheck && npm run check:pack"
   },
   "peerDependencies": { "@earendil-works/pi-coding-agent": "*" },
   "peerDependenciesMeta": { "@earendil-works/pi-coding-agent": { "optional": true } },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "0.84.4",
     "@types/node": "22.19.19",
+    "c8": "10.1.3",
     "typescript": "5.9.3"
   }
 }

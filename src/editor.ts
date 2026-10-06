@@ -10,7 +10,7 @@ export interface EditorDependencies {
 	runEditor: (editor: string, path: string) => Promise<void>;
 }
 
-const defaults: EditorDependencies = {
+const defaultEditorDependencies: EditorDependencies = {
 	createTempDirectory: () => mkdtemp(join(tmpdir(), "pi-system-prompt-")),
 	writePrompt: (path, prompt) => writeFile(path, prompt, "utf8"),
 	removeTempDirectory: (path) => rm(path, { recursive: true, force: true }),
@@ -19,7 +19,10 @@ const defaults: EditorDependencies = {
 		if (!command) return reject(new Error("Editor command is empty"));
 		const child = spawn(command, [...arguments_, path], { stdio: "inherit" });
 		child.once("error", reject);
-		child.once("exit", (code) => code === 0 ? resolve() : reject(new Error(`Editor exited with code ${code ?? "unknown"}`)));
+		child.once("exit", (code) => {
+			if (code === 0) resolve();
+			else reject(new Error(`Editor exited with code ${code ?? "unknown"}`));
+		});
 	}),
 };
 
@@ -27,7 +30,7 @@ export function selectEditor(environment: NodeJS.ProcessEnv = process.env, platf
 	return environment.VISUAL || environment.EDITOR || (platform === "win32" ? "notepad" : "nano");
 }
 
-export async function viewInEditor(prompt: string, editor: string, dependencies: EditorDependencies = defaults): Promise<void> {
+export async function viewInEditor(prompt: string, editor: string, dependencies: EditorDependencies = defaultEditorDependencies): Promise<void> {
 	const directory = await dependencies.createTempDirectory();
 	try {
 		const path = join(directory, "system-prompt.md");
