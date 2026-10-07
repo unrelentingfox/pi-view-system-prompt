@@ -1,8 +1,11 @@
 # pi-view-system-prompt
 
-[![CI](https://github.com/unrelentingfox/pi-view-system-prompt/actions/workflows/ci.yml/badge.svg)](https://github.com/unrelentingfox/pi-view-system-prompt/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/unrelentingfox/pi-view-system-prompt/graph/badge.svg)](https://codecov.io/gh/unrelentingfox/pi-view-system-prompt)
-[![npm](https://img.shields.io/npm/v/pi-view-system-prompt)](https://www.npmjs.com/package/pi-view-system-prompt)
+[![npm version](https://img.shields.io/npm/v/pi-view-system-prompt)](https://www.npmjs.com/package/pi-view-system-prompt)
+[![npm downloads](https://img.shields.io/npm/dm/pi-view-system-prompt)](https://www.npmjs.com/package/pi-view-system-prompt)
+[![CI](https://img.shields.io/github/actions/workflow/status/unrelentingfox/pi-view-system-prompt/ci.yml?branch=main&label=CI)](https://github.com/unrelentingfox/pi-view-system-prompt/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/unrelentingfox/pi-view-system-prompt/graph/badge.svg)](https://app.codecov.io/gh/unrelentingfox/pi-view-system-prompt)
+[![Node.js](https://img.shields.io/node/v/pi-view-system-prompt)](https://www.npmjs.com/package/pi-view-system-prompt)
+[![License](https://img.shields.io/github/license/unrelentingfox/pi-view-system-prompt)](https://github.com/unrelentingfox/pi-view-system-prompt/blob/main/LICENSE)
 
 A Pi extension that opens the current system prompt in an external editor.
 
